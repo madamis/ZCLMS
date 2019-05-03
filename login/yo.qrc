@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>pic_res.png</file>
+    <file>pic_bus2.jpg</file>
+    <file>pic_factory.png</file>
+  </qresource>
+</RCC>
