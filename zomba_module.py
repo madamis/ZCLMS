@@ -203,6 +203,8 @@ class Zomba:
         self.matabu.mainLeftList.itemSelectionChanged.connect(self.selectionChanged)
         self.matabu.filterList.textChanged.connect(self.filterListOnType)
         self.loginPAnel.login.clicked.connect(self.handle_login)
+        self.loginPAnel.hd.clicked.connect(self.handle_loghide)
+        self.matabu.pushDistance.clicked.connect(self.on_pushDistance_clicked)
 
         self.selection()
         self.matabu.add_btn.clicked.connect(self.add_btn_handler)
@@ -217,12 +219,12 @@ class Zomba:
         self.dlg.setCentralWidget(self.loginPAnel)
         self.dlg.show()
         # Run the dialog event loop
-        result = self.matabu.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+        # result = self.matabu.exec_()
+        # # See if OK was pressed
+        # if result:
+        #     # Do something useful here - delete the line containing pass and
+        #     # substitute with your code.
+        #     pass
 
     def selectionChanged(self):
         self.getSelectedFeature()
@@ -237,9 +239,9 @@ class Zomba:
         db = QSqlDatabase('QPSQL')
         if db.isValid():
             db.setHostName('localhost')
-            db.setDatabaseName('zomba_malawi')
+            db.setDatabaseName('login')
             db.setUserName('postgres')
-            db.setPassword('12345678')
+            db.setPassword('trzfibre')
             db.setPort(5432)
             print('connected')
         else:
@@ -348,9 +350,10 @@ class Zomba:
         return fin
 
     def selection(self):
+
         try:
-            connection = psycopg2.connect(user='postgres', password='12345678', host='localhost', port='5432',
-                                      database='zomba_malawi')
+            connection = psycopg2.connect(user='postgres', password='trzfibre', host='localhost', port='5432',
+                                      database='login')
             cursor = connection.cursor()
             query = """select fname, lname, plot_name, st_area(geom) area from developer Dv, plot Pl where Dv.plot_no = Pl.plot_no;"""
             cursor.execute(query)
@@ -367,14 +370,54 @@ class Zomba:
                      connection.close()
                      print("psql is closed")
 
+    def handle_loghide(self):
+        self.dlg.hide()
+
+
     def handle_login(self):
+
+        conn = psycopg2.connect(database="login", user="postgres", password="trzfibre", host="127.0.0.1", port="5432")
+        print("Opened database successfully")
+
+        cursor = conn.cursor()
+        querypp = "SELECT passwed,username FROM users;"
+        cursor.execute(querypp)
+
+        USERNAME = self.loginPAnel.username.text()
+        PASSWORD = self.loginPAnel.password.text()
+        get_username = ("SELECT * FROM users WHERE username = '" + USERNAME + "' AND passwed = '" + PASSWORD + "';")
+
+        cursor.execute(get_username, )
+        # print(cursor)
+        records = cursor.fetchall()
+        if len(records) > 0:
+
+
+            self.dlg.setCentralWidget(self.matabu)
+
+
+        else:
+            self.showdialog("entered wrong values")
+
+
+
         print('logging in')
-        self.dlg.setCentralWidget(self.matabu)
+
 
     def connection(self):
-        connection = psycopg2.connect(user='postgres', password='12345678', host='localhost', port='5432',
-                                      database='zomba_malawi')
+        connection = psycopg2.connect(user='postgres', password='trzfibre', host='localhost', port='5432',
+                                      database='login')
         return connection
+
+    def on_pushDistance_clicked(self):
+        ed1 = self.dlg.enterDistance1.text()
+        ed2 = self.dlg.enterDistance2.text()
+
+        query ="""SELECT e.plot_name, f.plot_name, st_distance(e.geom,f.geom) as DISTANCE FROM plot as e, plot as f where e.plot_name = '"""+ed1+"""'and f.plot_name = '"""+ed2+"""';"""
+        retval = self.database.exec_(query)
+        print(query)
+        print(retval.value('distance'))
+        print(self.database.lastError().text())
 
     def available_plot_numbers(self):
         connection = self.connection()
@@ -386,6 +429,7 @@ class Zomba:
             self.matabu.plot_combo.addItem(str(i[0])+"      "+i[1])
 
     def developers(self):
+
         try:
             connection = self.connection()
             cursor = connection.cursor()
@@ -405,6 +449,7 @@ class Zomba:
                      print("psql is closed")
 
     def viewDevelopersDetails(self,rowFromQuery):
+        pass
         self.customeUi = CustomeUI()
         self.customeUi.iconLabel.setPixmap(QtGui.QPixmap("user1.png"))
         self.customeUi.developer.setText(rowFromQuery[0] + " " + rowFromQuery[1])

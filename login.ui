@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>852</width>
-    <height>503</height>
+    <width>784</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>40</height>
+             <height>15</height>
             </size>
            </property>
           </spacer>
@@ -65,12 +65,12 @@ border radius:10px;</string>
                </font>
               </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>username</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="username">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -89,12 +89,12 @@ border radius:10px;</string>
                </font>
               </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>password</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_2">
+             <widget class="QLineEdit" name="password">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -121,14 +121,14 @@ border radius:10px;</string>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_2">
+                <widget class="QPushButton" name="hd">
                  <property name="font">
                   <font>
                    <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
-                  <string>PushButton</string>
+                  <string>close</string>
                  </property>
                 </widget>
                </item>
